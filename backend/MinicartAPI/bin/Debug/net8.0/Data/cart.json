@@ -1,0 +1,51 @@
+{
+  "Items": [
+    {
+      "Id": 1,
+      "Name": "Casual T-Shirt",
+      "Price": 19.99,
+      "Quantity": 1,
+      "Size": "M",
+      "Color": "Red",
+      "Pattern": "Striped"
+    },
+    {
+      "Id": 2,
+      "Name": "Jeans",
+      "Price": 49.99,
+      "Quantity": 2,
+      "Size": "L",
+      "Color": "Blue",
+      "Pattern": "Distressed"
+    },
+    {
+      "Id": 3,
+      "Name": "Sneakers",
+      "Price": 79.99,
+      "Quantity": 3,
+      "Size": "42",
+      "Color": "White",
+      "Pattern": "Solid"
+    },
+    {
+      "Id": 4,
+      "Name": "Sneakers",
+      "Price": 79.99,
+      "Quantity": 1,
+      "Size": "42",
+      "Color": "White",
+      "Pattern": "Solid"
+    },
+    {
+      "Id": 5,
+      "Name": "Sneakers",
+      "Price": 79.99,
+      "Quantity": 1,
+      "Size": "42",
+      "Color": "White",
+      "Pattern": "Solid"
+    }
+  ],
+  "ShippingCost": 30.00,
+  "Total": 529.92
+}
