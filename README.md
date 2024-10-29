@@ -6,7 +6,7 @@ Demo Minicart is an application that allows users to manage their shopping cart.
 ## Technologies
 - **Backend**: .NET
 - **Frontend**: Vue.js
-- **Styling**: CSS
+- **Styling**: CSS, SweetAlert2
 - **Data Format**: JSON
 
 ## Features
@@ -42,7 +42,7 @@ Demo Minicart is an application that allows users to manage their shopping cart.
     ```
 2. View the cart by clicking the cart icon in the top right corner
 3. Change the quantity of a product by clicking the `+` or `-` buttons
-4. Remove a product from the cart by clicking the `x` button
+4. if quantity is 0, the Dialog will ask if you want to remove the product from the cart
 5. View the order summary by clicking the `Order Summary` button (this is not yet implemented)
 
 ## in progress

@@ -161,7 +161,6 @@ export default {
 
 .cart-item__price {
   font: bold 14px Arial;
-  color: #565656;
-  margin-left: 15px;
+  color: #000000;
 }
 </style>

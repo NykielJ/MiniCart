@@ -1,6 +1,10 @@
 <template>
   <div class="shopping-cart">
-    <h2 class="shopping-cart__title">My Cart ({{ cartItems.length }})</h2>
+    <div class="shopping-cart__title-container">
+  <h2 class="shopping-cart__title">My Cart ({{ cartItems.length }})</h2>
+  <p class="free-delivery-info"> <o-icon name="CoTruck" />Free delivery from 100 €</p>
+</div>
+
     <div class="shopping-cart__items">
       <CartItem
         v-for="item in cartItems"
@@ -13,24 +17,24 @@
     </div>
     <div class="shopping-cart__summary">
       <div class="shopping-cart__shipping-cost-container">
-        <p class="shopping-cart__shipping-cost">Shipping: </p>
+        <p class="shopping-cart__shipping-cost">Shipping:</p>
         <p class="shopping-cart__shipping-cost-value">{{ shippingCost }} €</p>
       </div>
 
-      <div class = "shopping-cart__order-total-container">
-      <h3 class="shopping-cart__order-total">Total </h3>
-      <h3 class="shopping-cart__order-total-value">{{ orderTotal }} €</h3>
-      </div>   
+      <div class="shopping-cart__order-total-container">
+        <h3 class="shopping-cart__order-total">Total</h3>
+        <h3 class="shopping-cart__order-total-value">{{ orderTotal }} €</h3>
+      </div>
       <div>
-      <button class="shopping-cart__checkout-button">Checkout</button>
-    </div>
+        <button class="shopping-cart__checkout-button">Checkout</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import CartItem from './CartItem.vue';
-import apiService from '../services/apiService';
+import CartItem from "./CartItem.vue";
+import apiService from "../services/apiService";
 
 export default {
   components: {
@@ -47,11 +51,19 @@ export default {
     async increaseQuantity(item) {
       const updatedQuantity = item.quantity + 1;
       try {
-        const response = await apiService.updateItemQuantity(item.id, updatedQuantity);
+        const response = await apiService.updateItemQuantity(
+          item.id,
+          updatedQuantity
+        );
         this.cartItems = response.data.items;
+        if (response.data.shippingCost === 0) {
+          this.shippingCost = "FREE";
+        } else {
+          this.shippingCost = response.data.shippingCost;
+        }
         this.orderTotal = response.data.total;
       } catch (error) {
-        console.error('Błąd przy zwiększaniu ilości:', error);
+        console.error("Błąd przy zwiększaniu ilości:", error);
       }
     },
 
@@ -59,11 +71,19 @@ export default {
       if (item.quantity > 1) {
         const updatedQuantity = item.quantity - 1;
         try {
-          const response = await apiService.updateItemQuantity(item.id, updatedQuantity);
+          const response = await apiService.updateItemQuantity(
+            item.id,
+            updatedQuantity
+          );
           this.cartItems = response.data.items;
+          if (response.data.shippingCost === 0) {
+            this.shippingCost = "FREE";
+          } else {
+            this.shippingCost = response.data.shippingCost;
+          }
           this.orderTotal = response.data.total;
         } catch (error) {
-          console.error('Błąd przy zmniejszaniu ilości:', error);
+          console.error("Błąd przy zmniejszaniu ilości:", error);
         }
       }
     },
@@ -72,23 +92,29 @@ export default {
       try {
         const response = await apiService.removeItemFromCart(item.id);
         this.cartItems = response.data.items;
+        if (response.data.shippingCost === 0) {
+          this.shippingCost = "FREE";
+        } else {
+          this.shippingCost = response.data.shippingCost;
+        }
         this.orderTotal = response.data.total;
       } catch (error) {
-        console.error('Błąd przy usuwaniu przedmiotu:', error);
+        console.error("Błąd przy usuwaniu przedmiotu:", error);
       }
     },
   },
 
   mounted() {
-    apiService.getCart()
-      .then(response => {
+    apiService
+      .getCart()
+      .then((response) => {
         console.log(response.data);
         this.cartItems = response.data.items;
         this.shippingCost = response.data.shippingCost;
         this.orderTotal = response.data.total;
       })
-      .catch(error => {
-        console.error('Błąd przy ładowaniu koszyka:', error);
+      .catch((error) => {
+        console.error("Błąd przy ładowaniu koszyka:", error);
       });
   },
 };
@@ -103,7 +129,7 @@ export default {
   width: 36%;
   min-width: 460px;
   margin-left: auto;
-  background-color: #F5F4F9;
+  background-color: #f5f4f9;
   border: 1px solid #ff0000;
   border-radius: 8px;
   padding: 20px;
@@ -115,16 +141,26 @@ export default {
   overflow-y: auto;
 }
 
-.shopping-cart__title {
+.shopping-cart__title-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  font: bold 24px Arial, sans-serif;
-  color: #000000;
-  margin-top: 5px;
-  margin-bottom:  5px;
+  flex-direction: column; 
+  align-items: center; 
 }
 
+.shopping-cart__title {
+  font: bold 24px Arial, sans-serif;
+  color: #000000;
+  margin: 5px 0;
+}
+
+.free-delivery-info {
+  padding: 10px;
+  border: 2px solid #FF4D4D; 
+  border-radius: 5px; 
+  background-color: #f8f9fa; 
+  text-align: center; 
+  margin-top: 5px;
+}
 
 .shopping-cart__items {
   max-height: 100vh;
@@ -154,8 +190,8 @@ export default {
 }
 
 .shopping-cart__summary {
-  border-top: 1px solid #E5E4EA;
-  background-color: #F5F4F9;
+  border-top: 1px solid #e5e4ea;
+  background-color: #f5f4f9;
   padding: 0 20px;
   margin-top: auto;
   display: flex;
@@ -165,11 +201,10 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
 }
 
 .shopping-cart__shipping-cost {
-  font: bold 14px Arial, sans-serif;
+  font: 14px Arial, sans-serif;
   color: #575757;
 }
 
@@ -236,14 +271,12 @@ export default {
   .shopping-cart__checkout-button {
     font-size: 1rem;
   }
-  
+
   .shopping-cart__summary {
-    
     position: sticky;
     bottom: 0;
-    background-color: #F5F4F9;
+    background-color: #f5f4f9;
     padding: 15px 20px;
   }
 }
 </style>
-

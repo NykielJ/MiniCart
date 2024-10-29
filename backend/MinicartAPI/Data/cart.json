@@ -28,6 +28,6 @@
       "Pattern": "Solid"
     }
   ],
-  "ShippingCost": 15.00,
-  "Total": 224.97
+  "ShippingCost": 0,
+  "Total": 209.97
 }
