@@ -9,26 +9,32 @@
         <span v-if="item.pattern">Pattern: {{ item.pattern }}</span>
       </div>
       <div class="cart-item__quantity-price">
-        <div class="cart-item__quantity-control-box">
-          <button 
-            @click="decreaseQuantity" 
-            :class="{'cart-item__qty-button--disabled': localQuantity === 1}" 
-            :disabled="localQuantity === 1" 
-            class="cart-item__qty-button cart-item__qty-button--left">
-            -
-          </button>
-          <input type="text" v-model="localQuantity" readonly class="cart-item__qty-field" />
-          <button @click="increaseQuantity" class="cart-item__qty-button cart-item__qty-button--right">+</button>
+        <div class="cart-item__price">
+          {{ (item.price * localQuantity).toFixed(2) }} €
         </div>
-        <div class="cart-item__price">{{ (item.price * localQuantity).toFixed(2) }} €</div>
       </div>
     </div>
-    <button class="cart-item__remove-button" @click="removeItem">x</button>
+    <div class="cart-item__quantity-control-box">
+      <button @click="increaseQuantity" class="cart-item__qty-button">+</button>
+      <input type="text" v-model="localQuantity" readonly class="cart-item__qty-field" />
+      <button @click="decreaseQuantity" class="cart-item__qty-button">-</button>
+    </div>
+    <ConfirmationDialog
+      ref="confirmationDialog"
+      message="Do you want to remove this item from the cart?"
+      @confirm="confirmRemoval"
+      @cancel="cancelRemoval"
+    />
   </div>
 </template>
 
 <script>
+import ConfirmationDialog from "./ConfirmationDialog.vue";
+
 export default {
+  components: {
+    ConfirmationDialog,
+  },
   props: {
     item: {
       type: Object,
@@ -41,21 +47,27 @@ export default {
     };
   },
   watch: {
-    'item.quantity'(newQuantity) {
+    "item.quantity"(newQuantity) {
       this.localQuantity = newQuantity;
     },
   },
   methods: {
     increaseQuantity() {
-      this.$emit('increase-quantity', this.item);
+      this.$emit("increase-quantity", this.item);
     },
     decreaseQuantity() {
-      if (this.item.quantity > 1) {
-        this.$emit('decrease-quantity', this.item);
+      if (this.localQuantity === 1) {
+        // Wywołanie metody showDialog w ConfirmationDialog
+        this.$refs.confirmationDialog.showDialog();
+      } else {
+        this.$emit("decrease-quantity", this.item);
       }
     },
-    removeItem() {
-      this.$emit('remove-item', this.item);
+    confirmRemoval() {
+      this.$emit("remove-item", this.item);
+    },
+    cancelRemoval() {
+      // Brak akcji - użytkownik anulował usunięcie
     },
   },
 };
@@ -66,13 +78,12 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 0;
-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
-  padding: 5px;
-  margin-bottom: 5px ;
-  margin-top: 5px;
+  padding: 5px 10px 10px 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 10px;
+  margin-top: 10px;
   border-radius: 5px;
-  background-color: #ffffff; 
+  background-color: #ffffff;
 }
 
 .cart-item__image {
@@ -91,13 +102,14 @@ box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
 
 .cart-item__name {
   font: bold 14px Arial;
-  color: #565656; 
-  margin-bottom: 5px;
+  color: #565656;
+  margin-bottom: auto;
+  margin-top: auto;
 }
 
 .cart-item__attributes span {
   display: block;
-  font: regular 14px Arial;
+  font: 14px Arial;
   color: #565656;
 }
 
@@ -110,54 +122,46 @@ box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
 
 .cart-item__quantity-control-box {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  border: 1px solid #b0bec5;
   border-radius: 5px;
-  background-color: #f5f5f5; 
+  background-color: #F5F4F9;
+  overflow: hidden;
 }
 
 .cart-item__qty-button {
-  width: 25px;
+  width: 30px;
   height: 30px;
-  background-color: #ff4d4d; 
   border: none;
-  color: white;
+  color: #C48793;
   cursor: pointer;
+  background-color: #F5F4F9;
 }
 
-.cart-item__qty-button--left {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
+.cart-item__qty-button:first-child {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
-.cart-item__qty-button--right {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-}
-
-.cart-item__qty-button--disabled {
-  background-color: #b0bec5; 
+.cart-item__qty-button:last-child {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .cart-item__qty-field {
-  width: 40px;
-  height: 25px;
+  width: 25px;
+  height: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   text-align: center;
+  outline: none;
   border: none;
-  background-color: white;
+  background-color: #F5F4F9;
 }
 
 .cart-item__price {
   font: bold 14px Arial;
-  color: #565656; 
+  color: #565656;
   margin-left: 15px;
-}
-
-.cart-item__remove-button {
-  background: none;
-  border: none;
-  color: #d32f2f;
-  cursor: pointer;
-  font-size: 20px;
 }
 </style>

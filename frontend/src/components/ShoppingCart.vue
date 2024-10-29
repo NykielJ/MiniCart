@@ -1,6 +1,6 @@
 <template>
   <div class="shopping-cart">
-    <h2 class="shopping-cart__title">Cart ({{ cartItems.length }})</h2>
+    <h2 class="shopping-cart__title">My Cart ({{ cartItems.length }})</h2>
     <div class="shopping-cart__items">
       <CartItem
         v-for="item in cartItems"
@@ -80,6 +80,7 @@ export default {
     apiService.getCart()
       .then(response => {
         this.cartItems = response.data.items;
+        this
       })
       .catch(error => {
         console.error('Błąd przy ładowaniu koszyka:', error);
@@ -110,9 +111,13 @@ export default {
 }
 
 .shopping-cart__title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font: bold 24px Arial, sans-serif;
   color: #000000;
-  margin-bottom: 20px;
+  margin-top: auto;
+  margin-bottom:  auto;
 }
 
 

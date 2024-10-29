@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MinicartAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec59083aabf477b4129d4442fa79a5b7dcccbf6e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+41d7b7310936c6f30abdf01d83e3d7101d067132")]
 [assembly: System.Reflection.AssemblyProductAttribute("MinicartAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MinicartAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
