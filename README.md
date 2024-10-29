@@ -31,13 +31,13 @@ Demo Minicart is an application that allows users to manage their shopping cart.
 1. Add products to the cart by clicking use the swagger UI or by sending a POST request to `https://localhost:5001/api/cart/add` with the following body:
     ```json
     {
-  "id": 0,
-  "name": "string",
-  "price": 0,
-  "quantity": 0,
-  "size": "string",
-  "color": "string",
-  "pattern": "string"
+        "id": 0,
+        "name": "string",
+        "price": 0,
+        "quantity": 0,
+        "size": "string",
+        "color": "string",
+        "pattern": "string"
     }
     ```
 2. View the cart by clicking the cart icon in the top right corner
