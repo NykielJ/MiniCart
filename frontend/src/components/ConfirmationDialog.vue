@@ -1,3 +1,7 @@
+<template>
+  <div></div>
+</template>
+
 <script>
 import Swal from "sweetalert2";
 
@@ -13,7 +17,6 @@ export default {
       Swal.fire({
         title: "Are you sure?",
         text: this.message,
-        icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#d33",
         cancelButtonColor: "#3085d6",

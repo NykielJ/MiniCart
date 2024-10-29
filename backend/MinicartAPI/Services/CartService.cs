@@ -65,7 +65,7 @@ namespace MinicartAPI.Services
                 }
                 else
                 {
-                    throw new ArgumentException("Quantity must be greater than zero.");
+                    throw new ArgumentException("New quantity must be greater than zero.");
                 }
             }
             else

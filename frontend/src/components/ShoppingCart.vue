@@ -12,8 +12,15 @@
       />
     </div>
     <div class="shopping-cart__summary">
-      <p class="shopping-cart__shipping-cost">Shipping: {{ shippingCost.toFixed(2) }} €</p>
-      <h3 class="shopping-cart__order-total">Order Total: {{ orderTotal }} €</h3>
+      <div class="shopping-cart__shipping-cost-container">
+        <p class="shopping-cart__shipping-cost">Shipping: </p>
+        <p class="shopping-cart__shipping-cost-value">{{ shippingCost }} €</p>
+      </div>
+
+      <div class = "shopping-cart__order-total-container">
+      <h3 class="shopping-cart__order-total">Total </h3>
+      <h3 class="shopping-cart__order-total-value">{{ orderTotal }} €</h3>
+      </div>   
       <div>
       <button class="shopping-cart__checkout-button">Checkout</button>
     </div>
@@ -32,16 +39,9 @@ export default {
   data() {
     return {
       cartItems: [],
-      shippingCost: 15.0,
+      shippingCost: 10,
+      orderTotal: 0,
     };
-  },
-  computed: {
-    orderTotal() {
-      return (
-        this.cartItems.reduce((total, item) => total + (item.price * item.quantity), 0) +
-        this.shippingCost
-      ).toFixed(2);
-    },
   },
   methods: {
     async increaseQuantity(item) {
@@ -49,6 +49,7 @@ export default {
       try {
         const response = await apiService.updateItemQuantity(item.id, updatedQuantity);
         this.cartItems = response.data.items;
+        this.orderTotal = response.data.total;
       } catch (error) {
         console.error('Błąd przy zwiększaniu ilości:', error);
       }
@@ -60,6 +61,7 @@ export default {
         try {
           const response = await apiService.updateItemQuantity(item.id, updatedQuantity);
           this.cartItems = response.data.items;
+          this.orderTotal = response.data.total;
         } catch (error) {
           console.error('Błąd przy zmniejszaniu ilości:', error);
         }
@@ -70,6 +72,7 @@ export default {
       try {
         const response = await apiService.removeItemFromCart(item.id);
         this.cartItems = response.data.items;
+        this.orderTotal = response.data.total;
       } catch (error) {
         console.error('Błąd przy usuwaniu przedmiotu:', error);
       }
@@ -79,8 +82,10 @@ export default {
   mounted() {
     apiService.getCart()
       .then(response => {
+        console.log(response.data);
         this.cartItems = response.data.items;
-        this
+        this.shippingCost = response.data.shippingCost;
+        this.orderTotal = response.data.total;
       })
       .catch(error => {
         console.error('Błąd przy ładowaniu koszyka:', error);
@@ -116,8 +121,8 @@ export default {
   align-items: center;
   font: bold 24px Arial, sans-serif;
   color: #000000;
-  margin-top: auto;
-  margin-bottom:  auto;
+  margin-top: 5px;
+  margin-bottom:  5px;
 }
 
 
@@ -156,14 +161,29 @@ export default {
   display: flex;
   flex-direction: column;
 }
+.shopping-cart__shipping-cost-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
 
 .shopping-cart__shipping-cost {
-  font: bold 16px Arial, sans-serif;
+  font: bold 14px Arial, sans-serif;
   color: #575757;
 }
 
+.shopping-cart__order-total-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .shopping-cart__order-total {
-  margin: 10px 0;
+  font: 18px Arial, sans-serif;
+  color: #000000;
+}
+.shopping-cart__order-total-value {
   font: bold 18px Arial, sans-serif;
   color: #000000;
 }
